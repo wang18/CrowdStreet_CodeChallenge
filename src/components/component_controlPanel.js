@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {saveData} from '../actions/index';
+import {saveDataRed, saveDataGreen, saveDataBlue, cancelPanel} from '../actions/index';
 import {bindActionCreators} from 'redux';
 
 class ControlPanel extends Component {
@@ -22,7 +22,29 @@ class ControlPanel extends Component {
     handleSubmit=(e)=>{
         e.preventDefault();
         const {N, X, M, W, D}=this.state;
-        this.props.saveData({N, X, M, W, D});
+        switch (this.props.ConfigurePanel.panelName){
+            case 'RED':
+                console.log('RED');
+                this.props.saveDataRed({N, X, M, W, D});
+                break;
+            case 'GREEN':
+                console.log('GREEN');
+                this.props.saveDataGreen({N, X, M, W, D});
+                break;
+            case 'BLUE':
+                console.log('BLUE');
+                this.props.saveDataBlue({N, X, M, W, D});
+                break;
+            default:
+                break;
+        }
+        this.setState({
+            N:0,
+            X:0,
+            M:0,
+            W:0,
+            D:''});
+
     }
 
     InputField=(inputName)=>{
@@ -36,10 +58,18 @@ class ControlPanel extends Component {
                 </div>);
     }
 
+
+    handleCancelPanel(e){
+        e.preventDefault();
+        this.props.cancelPanel();
+    }
+
     render(){
+        const strongColor = {color: this.props.ConfigurePanel.panelName};
+
         return (<div className="">
             <form className="ui form" onSubmit={this.handleSubmit}>
-                <h1>Table Red</h1>
+                <h1>Table <strong style={strongColor}>{this.props.ConfigurePanel.panelName}</strong></h1>
                 {this.InputField("N")}
                 {this.InputField("X")}
                 {this.InputField("M")}
@@ -59,12 +89,9 @@ class ControlPanel extends Component {
                 </div>
 
                 <div className="field">
-                    <button className="ui primary button">OK</button>
-                    <button className="ui red button">CANCEL</button>
-
+                    <button className="ui button">OK</button>
+                    <button className="ui button" onClick={this.handleCancelPanel.bind(this)}>CANCEL</button>
                 </div>
-
-
             </form>
         </div>);
     }
@@ -72,11 +99,13 @@ class ControlPanel extends Component {
 
 const mapStateToProps=(state)=>{
     return {
-        RedTable: state.RedTable
+        RedTable: state.RedTable,
+        ConfigurePanel: state.ConfigurePanel
+
     };
 }
 
 const mapDispatchToProps=(dispatch)=>{
-    return bindActionCreators({saveData},dispatch);
+    return bindActionCreators({saveDataRed, saveDataGreen, saveDataBlue, cancelPanel},dispatch);
 }
 export default connect(mapStateToProps,mapDispatchToProps)(ControlPanel);

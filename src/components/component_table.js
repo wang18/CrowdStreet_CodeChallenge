@@ -14,7 +14,7 @@ class Table extends React.Component{
     render() {
         const {tableData} = this.props;
         return (
-            <table className="ui celled table">
+            <table className="ui celled table dataTable">
                 <tbody>
                 {tableData.map(((arr, i) => {
                     return this.createRow(arr,i)

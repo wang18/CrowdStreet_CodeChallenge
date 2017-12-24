@@ -1,1 +1,5 @@
-export const SAVE_DATA="SAVE_DATA";
+export const SAVE_DATA_RED="SAVE_DATA_RED";
+export const SAVE_DATA_GREEN="SAVE_DATA_GREEN";
+export const SAVE_DATA_BLUE="SAVE_DATA_BLUE";
+export const SHOW_PANEL="SHOW_PANEL";
+export const CANCLE_PANEL="CANCLE_PANEL";

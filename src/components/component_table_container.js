@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Table from "./component_table";
-
+import {showConfigurePanel} from '../actions/index';
+import {bindActionCreators} from 'redux';
 class TableContainer extends Component {
-
     createDataArray(N,X,M,D){
         const dataArr = [];
         let tmp=Number.parseInt(N);
@@ -23,7 +23,7 @@ class TableContainer extends Component {
                             continue;
                         }
                         else if ((tmp > maxNum) ) {
-                            flag ? row[j]=-1:row[4-j]='';
+                            flag ? row[j]='':row[4-j]='';
                         }
                     }
                 }
@@ -44,32 +44,84 @@ class TableContainer extends Component {
                             continue;
                         }
                         else if ((tmp > maxNum) ) {
-                            flag ? row[j]=-1:row[4-j]='';
+                            flag ? row[j]='':row[4-j]='';
                         }
                     }
                 }
                 dataArr.push(row);
                 flag=!flag;
             }
+        }else{
+            dataArr.push(['','','','','']);
+            dataArr.push(['','','','','']);
+            dataArr.push(['','','','','']);
+            dataArr.push(['','','','','']);
+            dataArr.push(['','','','','']);
         }
         return dataArr;
     }
 
+    handleClickConfigure(name){
+       this.props.showConfigurePanel({
+           panelName: name,
+           panelShow :true
+       });
+
+    }
+
+    getDataArray(generalTableData){
+        const {N, X, M, D}=generalTableData;
+        return this.createDataArray(N,X,M,D).reverse();
+    }
+
     render(){
         console.log(this.props.RedTable);
-        const {N, X, M, D}=this.props.RedTable;
-        const dataArray = this.createDataArray(N,X,M,D).reverse();
-        console.log('dataArray: ', dataArray);
-        return (<div className="">
-            <Table tableData={dataArray}/>
+
+        const WR=this.props.RedTable.W;
+        const WG=this.props.GreenTable.W;
+        const WB=this.props.BlueTable.W;
+        const dataArrayRed = this.getDataArray(this.props.RedTable);
+        const dataArrayGreen = this.getDataArray(this.props.GreenTable);
+        const dataArrayBlue = this.getDataArray(this.props.BlueTable);
+
+        console.log('dataArrayRed : ', dataArrayRed );
+        console.log('dataArrayGreen : ', dataArrayGreen );
+        console.log('dataArrayBlue : ', dataArrayBlue );
+        const tableRedWidthStyle = {width: WR===0 ? '30%':`${WR}%`};
+        const tableGreenWidthStyle = {width: WG===0 ? '30%':`${WG}%`};
+        const tableBlueWidthStyle = {width: WB===0 ? '30%':`${WB}%`};
+        return (<div className="ui grid">
+            <div className="wide column" style={tableRedWidthStyle}>
+                <Table tableData={dataArrayRed }/>
+                <button className="ui button" onClick={this.handleClickConfigure.bind(this, 'RED')}>Configure</button>
+                <label>{WR}%</label>
+            </div>
+
+            <div  className="wide column" style={tableGreenWidthStyle}>
+                <Table tableData={dataArrayGreen}/>
+                <button className="ui button" onClick={this.handleClickConfigure.bind(this, 'GREEN')}>Configure</button>
+                <label>{WG}%</label>
+            </div>
+
+            <div  className="wide column" style={tableBlueWidthStyle}>
+                <Table tableData={dataArrayBlue}/>
+                <button className="ui button" onClick={this.handleClickConfigure.bind(this, 'BLUE')}>Configure</button>
+                <label>{WB}%</label>
+            </div>
         </div>);
     }
 }
 
-const mapStateToProps=(state)=>{
+const mapStateToProps=(state, props)=>{
+    console.log('cur props: ',props);
     return {
-        RedTable: state.RedTable
+        RedTable: state.RedTable,
+        GreenTable: state.GreenTable,
+        BlueTable: state.BlueTable
     };
 }
 
-export default connect(mapStateToProps,null)(TableContainer);
+const mapDispatchToProps=(dispatch)=>{
+    return bindActionCreators({showConfigurePanel},dispatch);
+}
+export default connect(mapStateToProps,mapDispatchToProps)(TableContainer);
