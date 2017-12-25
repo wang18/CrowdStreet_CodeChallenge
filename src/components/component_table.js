@@ -1,8 +1,6 @@
 import React from 'react';
 
-
 class Table extends React.Component{
-
     createRow(arr,i){
         return(<tr key={i}>
             {arr.map((ele,j)=>{
@@ -26,7 +24,5 @@ class Table extends React.Component{
         );
     }
 }
-
-
 
 export default Table;
