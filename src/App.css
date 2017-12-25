@@ -1,5 +1,4 @@
 .App {
-  text-align: center;
 }
 
 .App-logo {
@@ -29,4 +28,70 @@
 
 .dataTable{
   height: 250px;
+}
+
+.empty {
+  background-color: gray;
+}
+
+.redTable{
+  border: 2px solid red;
+  margin-bottom: 20px ;
+}
+.greenTable{
+  border: 2px solid green;
+  margin-bottom: 20px ;
+}
+.blueTable{
+  border: 2px solid blue;
+  margin-bottom: 20px ;
+}
+
+.panelForm{
+  background-color: #f0f0f0;
+  overflow:hidden;
+
+}
+
+.panelDiv{
+  margin-top: 35px;
+  margin-bottom: 55px;
+}
+
+.panelDiv div{
+  margin-left: 0px !important;
+  margin-top: 0px !important;
+}
+
+@media(max-width: 1200px) {
+  .blueTable {
+    display: none !important;
+  }
+}
+
+.topTable {
+  overflow:hidden;
+}
+.bottomTable {
+  overflow:hidden;
+}
+
+@media screen and (max-width: 960px) {
+  .wrapper {
+    display: block !important;
+  }
+
+ .topTable {
+    margin-bottom: 20px ;
+  }
+  .ui.grid>.topTable:not(.row),.ui.grid>.bottomTable:not(.row){
+    display: block !important;
+  }
+}
+.title{
+  margin: 45px 0px;
+  font-size: 3rem;
+}
+.ui.basic.red.label{
+  margin-left: 15px !important;
 }

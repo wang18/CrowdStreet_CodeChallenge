@@ -1,14 +1,20 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Table from "./component_table";
-import {showConfigurePanel} from '../actions/index';
+import {showConfigurePanel,fetchTableRedData, fetchTableGreenData, fetchTableBlueData} from '../actions/index';
 import {bindActionCreators} from 'redux';
 class TableContainer extends Component {
+    componentWillMount(){
+        this.props.fetchTableRedData();
+        this.props.fetchTableGreenData();
+        this.props.fetchTableBlueData();
+    }
+
     createDataArray(N,X,M,D){
         const dataArr = [];
-        let tmp=Number.parseInt(N);
-        const increase=parseInt(X);
-        const maxNum=parseInt(M);
+        let tmp=Number.parseInt(N,10);
+        const increase=parseInt(X,10);
+        const maxNum=parseInt(M,10);
         if(D==='LTR-UP'){
             let flag=true;
             for(let i=0;i<5;i++){
@@ -52,11 +58,11 @@ class TableContainer extends Component {
                 flag=!flag;
             }
         }else{
-            dataArr.push(['','','','','']);
-            dataArr.push(['','','','','']);
-            dataArr.push(['','','','','']);
-            dataArr.push(['','','','','']);
-            dataArr.push(['','','','','']);
+            dataArr.push(['ini','ini','ini','ini','ini']);
+            dataArr.push(['ini','ini','ini','ini','ini']);
+            dataArr.push(['ini','ini','ini','ini','ini']);
+            dataArr.push(['ini','ini','ini','ini','ini']);
+            dataArr.push(['ini','ini','ini','ini','ini']);
         }
         return dataArr;
     }
@@ -75,45 +81,42 @@ class TableContainer extends Component {
     }
 
     render(){
-        console.log(this.props.RedTable);
-
         const WR=this.props.RedTable.W;
         const WG=this.props.GreenTable.W;
         const WB=this.props.BlueTable.W;
         const dataArrayRed = this.getDataArray(this.props.RedTable);
         const dataArrayGreen = this.getDataArray(this.props.GreenTable);
         const dataArrayBlue = this.getDataArray(this.props.BlueTable);
+        const tableRedWidthStyle = {width: WR===-1 ? '30%':`${WR}%`};
+        const tableGreenWidthStyle = {width: WG===-1 ? '30%':`${WG}%`};
+        const tableBlueWidthStyle = {width: WB===-1 ? '30%':`${WB}%`};
+        return (<div className="ui container">
+            <div className="ui title"><b>TEST #6531</b></div >
 
-        console.log('dataArrayRed : ', dataArrayRed );
-        console.log('dataArrayGreen : ', dataArrayGreen );
-        console.log('dataArrayBlue : ', dataArrayBlue );
-        const tableRedWidthStyle = {width: WR===0 ? '30%':`${WR}%`};
-        const tableGreenWidthStyle = {width: WG===0 ? '30%':`${WG}%`};
-        const tableBlueWidthStyle = {width: WB===0 ? '30%':`${WB}%`};
-        return (<div className="ui grid">
-            <div className="wide column" style={tableRedWidthStyle}>
-                <Table tableData={dataArrayRed }/>
-                <button className="ui button" onClick={this.handleClickConfigure.bind(this, 'RED')}>Configure</button>
-                <label>{WR}%</label>
-            </div>
+            <div className="ui grid centered wrapper">
+                <div className="wide column centered redTable topTable" style={tableRedWidthStyle}>
+                    <Table tableData={dataArrayRed }/>
+                    <button className="ui button" onClick={this.handleClickConfigure.bind(this, 'RED')}>Configure</button>
+                    <label>{WR===-1 ? 0 : WR}%</label>
+                </div>
 
-            <div  className="wide column" style={tableGreenWidthStyle}>
-                <Table tableData={dataArrayGreen}/>
-                <button className="ui button" onClick={this.handleClickConfigure.bind(this, 'GREEN')}>Configure</button>
-                <label>{WG}%</label>
-            </div>
+                <div  className="wide column centered greenTable bottomTable" style={tableGreenWidthStyle}>
+                    <Table tableData={dataArrayGreen}/>
+                    <button className="ui button" onClick={this.handleClickConfigure.bind(this, 'GREEN')}>Configure</button>
+                    <label>{WG===-1 ? 0 : WG}%</label>
+                </div>
 
-            <div  className="wide column" style={tableBlueWidthStyle}>
-                <Table tableData={dataArrayBlue}/>
-                <button className="ui button" onClick={this.handleClickConfigure.bind(this, 'BLUE')}>Configure</button>
-                <label>{WB}%</label>
+                <div  className="wide column centered blueTable" style={tableBlueWidthStyle}>
+                    <Table tableData={dataArrayBlue}/>
+                    <button className="ui button" onClick={this.handleClickConfigure.bind(this, 'BLUE')}>Configure</button>
+                    <label>{WB===-1 ? 0 : WB}%</label>
+                </div>
             </div>
         </div>);
     }
 }
 
-const mapStateToProps=(state, props)=>{
-    console.log('cur props: ',props);
+const mapStateToProps=(state)=>{
     return {
         RedTable: state.RedTable,
         GreenTable: state.GreenTable,
@@ -122,6 +125,6 @@ const mapStateToProps=(state, props)=>{
 }
 
 const mapDispatchToProps=(dispatch)=>{
-    return bindActionCreators({showConfigurePanel},dispatch);
+    return bindActionCreators({showConfigurePanel,fetchTableRedData, fetchTableGreenData, fetchTableBlueData},dispatch);
 }
 export default connect(mapStateToProps,mapDispatchToProps)(TableContainer);

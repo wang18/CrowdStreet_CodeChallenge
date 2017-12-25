@@ -6,7 +6,7 @@ class Table extends React.Component{
     createRow(arr,i){
         return(<tr key={i}>
             {arr.map((ele,j)=>{
-               return  <td key={j}>{ele}</td>
+                return  <td key={j} className={ele==='' ? 'empty':''}>{ele==='ini' ? '' : ele}</td>
             })}
         </tr>)
     }
@@ -14,7 +14,7 @@ class Table extends React.Component{
     render() {
         const {tableData} = this.props;
         return (
-            <table className="ui celled table dataTable">
+            <table className="ui unstackable celled table dataTable">
                 <tbody>
                 {tableData.map(((arr, i) => {
                     return this.createRow(arr,i)
